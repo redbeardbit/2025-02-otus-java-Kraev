@@ -25,9 +25,7 @@ dependency-reduced-pom.xml
 
 ### STS ###
 .apt_generated
-.classpath
 .factorypath
-.project
 .settings
 .springBeans
 .sts4-cache
@@ -46,3 +44,7 @@ dependency-reduced-pom.xml
 /nbdist/
 /.nb-gradle/
 /spring-shell.log
+/hw01/gradlew.bat
+/hw01/gradlew
+/hw01/gradle/wrapper/gradle-wrapper.jar
+/hw01/gradle/wrapper/gradle-wrapper.properties
