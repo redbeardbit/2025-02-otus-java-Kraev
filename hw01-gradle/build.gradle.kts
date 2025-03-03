@@ -6,7 +6,7 @@ dependencies {
     implementation ("com.google.guava:guava")
 }
 
-tasks.register<Jar>("uberJar") {
+val taskUberJar by tasks.register<Jar>("uberJar") {
     manifest {
         attributes("Main-Class" to "ru.otus.HelloOtus")
     }
@@ -20,4 +20,8 @@ tasks.register<Jar>("uberJar") {
     from({
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
     })
+}
+
+tasks.build {
+    dependsOn(taskUberJar)
 }
