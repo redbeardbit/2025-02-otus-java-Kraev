@@ -1,7 +1,5 @@
 package homework;
 
-import java.util.Objects;
-
 public class Customer {
     private final long id;
 
@@ -15,6 +13,10 @@ public class Customer {
         this.id = id;
         this.name = name;
         this.scores = scores;
+    }
+
+    public Customer(Customer customer) {
+        this(customer.getId(), customer.getName(), customer.getScores());
     }
 
     public long getId() {
