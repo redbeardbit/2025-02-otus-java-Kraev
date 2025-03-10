@@ -16,7 +16,7 @@ hw03-annotations - Тестовый фреймворк
 ## Окружение
 На курсе “Разработчик Java” используется следующее окружение:
 * Git
-* Java 13
+* Java 21
 * Maven/Gradle последние версии
 * IntelliJ IDEA Community Edition (и выше) 
 
