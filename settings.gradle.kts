@@ -3,6 +3,10 @@ rootProject.name = "2025-02-otus-java-Kraev"
 include("hw01-gradle")
 include("hw02-generics")
 
+rootProject.children.forEach {
+    project(it.path).projectDir.mkdirs()
+}
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
