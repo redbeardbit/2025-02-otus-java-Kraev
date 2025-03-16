@@ -44,7 +44,7 @@ public class Reflection {
                 return true;
             }
         } catch (NoSuchMethodException e) {
-            //ignore
+            return false;
         }
         return false;
     }
