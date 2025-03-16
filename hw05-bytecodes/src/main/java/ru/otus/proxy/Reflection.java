@@ -1,9 +1,13 @@
 package ru.otus.proxy;
 
+import ru.otus.annotation.Log;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class Reflection {
 
@@ -19,10 +23,30 @@ public class Reflection {
 
     public static String[] getParameterNames(Method method) {
         Parameter[] parameters = method.getParameters();
-        String[] parameterNames = new String[parameters.length];
-        for (int i = 0; i < parameters.length; i++) {
-            parameterNames[i] = parameters[i].getName();
-        }
-        return parameterNames;
+        return Arrays.stream(parameters)
+                .map(Parameter::getName)
+                .toArray(String[]::new);
     }
+
+    public static String getLogMessage(Method method, Object[] args) {
+        String[] parameterNames = getParameterNames(method);
+        String params = Arrays.stream(parameterNames)
+                .map(name -> String.format("%s:%s", name, args[Arrays.asList(parameterNames).indexOf(name)]))
+                .collect(Collectors.joining(", "));
+        return String.format("executed method: %s, %s", method.getName(), params);
+    }
+
+    public static boolean isLogAnnotationPresent(Object target, Method method) {
+        try {
+            Method targetMethod = target.getClass().getMethod(method.getName(), method.getParameterTypes());
+
+            if (targetMethod.isAnnotationPresent(Log.class)) {
+                return true;
+            }
+        } catch (NoSuchMethodException e) {
+            //ignore
+        }
+        return false;
+    }
+
 }

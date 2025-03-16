@@ -5,7 +5,9 @@ import ru.otus.proxy.Ioc;
 public class Demo {
     public void action() {
 
-        TestLogging testLogging = Ioc.newTestLogging();
+        TestLogging testLogging = Ioc.newLoggedInstance(new TestLoggingImpl(), TestLogging.class);
+
+        assert testLogging != null;
 
         testLogging.calculation(1);
         testLogging.calculation(2, 3);

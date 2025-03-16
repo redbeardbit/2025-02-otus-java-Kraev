@@ -1,6 +1,6 @@
 package ru.otus.Logger;
 
-public interface OtusLogger {
+public interface Logger {
 
     void log(String var1);
 
