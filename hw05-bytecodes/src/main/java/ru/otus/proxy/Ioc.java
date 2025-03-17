@@ -1,11 +1,12 @@
 package ru.otus.proxy;
 
-import ru.otus.Logger.LoggingInvocationHandler;
-import ru.otus.Logger.SillyLogger;
+import ru.otus.logger.LoggingInvocationHandler;
+import ru.otus.logger.SillyLogger;
 
 public class Ioc {
 
-    public Ioc() {
+    private Ioc() {
+        // Private constructor to hide the implicit public one
     }
 
     public static <T> T newLoggedInstance(T target, Class<T> interfaceType) {

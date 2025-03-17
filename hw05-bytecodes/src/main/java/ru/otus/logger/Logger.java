@@ -1,4 +1,4 @@
-package ru.otus.Logger;
+package ru.otus.logger;
 
 public interface Logger {
 

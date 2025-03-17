@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 
 public class Reflection {
 
+    private Reflection() {
+        // Private constructor to hide the implicit public one
+    }
+
     public static <T> T newProxy(Class<T> interfaceType, InvocationHandler handler) {
         if (!interfaceType.isInterface()) {
             throw new IllegalArgumentException("Class must be interface");
