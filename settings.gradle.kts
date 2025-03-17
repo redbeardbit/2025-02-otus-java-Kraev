@@ -1,7 +1,11 @@
 rootProject.name = "2025-02-otus-java-Kraev"
 
 include("hw01-gradle")
+include("hw02-generics")
 
+rootProject.children.forEach {
+    project(it.path).projectDir.mkdirs()
+}
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
@@ -21,5 +25,11 @@ pluginManagement {
         id("com.google.protobuf") version protobufVer
         id("name.remal.sonarlint") version sonarlint
         id("com.diffplug.spotless") version spotless
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
     }
 }

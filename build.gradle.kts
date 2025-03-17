@@ -1,11 +1,17 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
+import fr.brouillard.oss.gradle.plugins.JGitverPluginExtension
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+import name.remal.gradle_plugins.sonarlint.SonarLintExtension
 import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 
 plugins {
     idea
+    id("fr.brouillard.oss.gradle.jgitver")
     id("io.spring.dependency-management")
     id("org.springframework.boot") apply false
+    id("name.remal.sonarlint") apply false
+    id("com.diffplug.spotless") apply false
 }
 
 idea {
@@ -30,6 +36,8 @@ allprojects {
     val testcontainersBom: String by project
     val protobufBom: String by project
     val guava: String by project
+    val junit: String by project
+    val assertj: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -54,6 +62,40 @@ subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.compilerArgs.addAll(listOf("-Xlint:all,-serial,-processing"))
+    }
+
+    plugins.apply("name.remal.sonarlint")
+    extensions.configure<SonarLintExtension> {
+        nodeJs {
+            detectNodeJs = false
+            logNodeJsNotFound = false
+        }
+    }
+    plugins.apply("com.diffplug.spotless")
+    extensions.configure<SpotlessExtension> {
+        java {
+            palantirJavaFormat("2../58.0")
+        }
+    }
+
+    plugins.apply("fr.brouillard.oss.gradle.jgitver")
+    extensions.configure<JGitverPluginExtension> {
+        strategy("PATTERN")
+        nonQualifierBranches("main,master")
+        tagVersionPattern("\${v}\${<meta.DIRTY_TEXT}")
+        versionPattern(
+            "\${v}\${<meta.COMMIT_DISTANCE}\${<meta.GIT_SHA1_8}" +
+                    "\${<meta.QUALIFIED_BRANCH_NAME}\${<meta.DIRTY_TEXT}-SNAPSHOT"
+        )
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+        testLogging.showExceptions = true
+        reports {
+            junitXml.required.set(true)
+            html.required.set(true)
+        }
     }
 }
 
