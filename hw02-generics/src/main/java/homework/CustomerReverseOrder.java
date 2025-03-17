@@ -3,6 +3,7 @@ package homework;
 import java.util.Deque;
 import java.util.LinkedList;
 
+@SuppressWarnings("java:S1135")
 public class CustomerReverseOrder {
 
     // todo: 2. надо реализовать методы этого класса
