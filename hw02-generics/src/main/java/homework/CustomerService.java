@@ -2,6 +2,7 @@ package homework;
 
 import java.util.*;
 
+@SuppressWarnings("java:S1135")
 public class CustomerService {
 
     // todo: 3. надо реализовать методы этого класса
@@ -9,7 +10,7 @@ public class CustomerService {
     private final NavigableMap<Customer, String> customerStringMap;
 
     public CustomerService() {
-        this.customerStringMap = new TreeMap<>(Comparator.comparingLong(o -> o.getScores()));
+        this.customerStringMap = new TreeMap<>(Comparator.comparingLong(Customer::getScores));
     }
 
     public Map.Entry<Customer, String> getSmallest() {
