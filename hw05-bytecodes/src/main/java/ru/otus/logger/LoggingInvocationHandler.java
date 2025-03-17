@@ -1,9 +1,8 @@
 package ru.otus.logger;
 
-import ru.otus.proxy.Reflection;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import ru.otus.proxy.Reflection;
 
 public class LoggingInvocationHandler implements InvocationHandler {
 
