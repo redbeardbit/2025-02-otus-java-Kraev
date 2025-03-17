@@ -1,5 +1,6 @@
 package homework;
 
+@SuppressWarnings("java:S1135")
 public class Customer {
     private final long id;
 
@@ -56,7 +57,6 @@ public class Customer {
         Customer customer = (Customer) o;
 
         return id == customer.id;
-
     }
 
     @Override

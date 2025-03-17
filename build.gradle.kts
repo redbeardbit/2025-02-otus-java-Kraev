@@ -74,7 +74,7 @@ subprojects {
     plugins.apply("com.diffplug.spotless")
     extensions.configure<SpotlessExtension> {
         java {
-            palantirJavaFormat("2../58.0")
+            palantirJavaFormat("2.58.0")
         }
     }
 
