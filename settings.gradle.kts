@@ -7,10 +7,6 @@ include("hw04-gc")
 rootProject.children.forEach {
     project(it.path).projectDir.mkdirs()
 }
-
-rootProject.children.forEach {
-    project(it.path).projectDir.mkdirs()
-}
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
