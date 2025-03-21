@@ -8,15 +8,15 @@
 Структура каталога:
 
 hw01-gradle   - Проект gradle с модульной структурой \
-hw02-generics - Применение коллекций
-
+hw02-generics - Применение коллекций \
+hw03-annotations - Тестовый фреймворк
 <details>
 <summary>Дополнительная информация</summary>
 
 ## Окружение
 На курсе “Разработчик Java” используется следующее окружение:
 * Git
-* Java 13
+* Java 21
 * Maven/Gradle последние версии
 * IntelliJ IDEA Community Edition (и выше) 
 
