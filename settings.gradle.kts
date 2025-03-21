@@ -2,6 +2,7 @@ rootProject.name = "2025-02-otus-java-Kraev"
 
 include("hw01-gradle")
 include("hw02-generics")
+include("hw06-solid")
 
 rootProject.children.forEach {
     project(it.path).projectDir.mkdirs()
