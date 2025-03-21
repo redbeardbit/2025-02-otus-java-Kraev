@@ -1,15 +1,14 @@
 package ru.otus.tests.kit.engine;
 
-import ru.otus.tests.kit.annotations.After;
-import ru.otus.tests.kit.annotations.Before;
-import ru.otus.tests.kit.annotations.Test;
-import ru.otus.tests.kit.preconditions.Preconditions;
+import static ru.otus.tests.kit.reflection.ReflectionSupport.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import static ru.otus.tests.kit.reflection.ReflectionSupport.*;
+import ru.otus.tests.kit.annotations.After;
+import ru.otus.tests.kit.annotations.Before;
+import ru.otus.tests.kit.annotations.Test;
+import ru.otus.tests.kit.preconditions.Preconditions;
 
 public class TestExecutor {
 
@@ -35,10 +34,10 @@ public class TestExecutor {
 
         Preconditions.notNull(testObject, "Test object must not be null");
         Preconditions.notEmpty(tests, "Test must not be empty");
-
         return new TestFlow(testObject, tests);
     }
 
+    @SuppressWarnings("java:S106")
     public void run(Class<?>... testClasses) {
         List<TestResult> results = new ArrayList<>();
 
@@ -52,14 +51,25 @@ public class TestExecutor {
         printReport(results);
     }
 
+    @SuppressWarnings({"java:S106", "java:S3457"})
     private void printReport(List<TestResult> results) {
 
         System.out.println("=".repeat(80));
         System.out.println("Test report:");
-        System.out.printf("Total number of tests: %d, are successful: %d\n", results.size(), results.stream().filter(r -> Status.SUCCESSFUL.equals(r.status())).count());
+        System.out.printf(
+                "Total number of tests: %d, are successful: %d %s",
+                results.size(),
+                results.stream()
+                        .filter(r -> Status.SUCCESSFUL.equals(r.status()))
+                        .count(),
+                System.lineSeparator());
 
         System.out.println("=".repeat(80));
         System.out.println("Test Details:");
-        results.forEach(r -> System.out.printf("Test name: [%s], status: %s%n", r.testName(), r.status()));
+        results.forEach(r -> System.out.printf(
+                "Test name: [%s], status: %s" + System.lineSeparator(),
+                r.testName(),
+                r.status(),
+                System.lineSeparator()));
     }
 }

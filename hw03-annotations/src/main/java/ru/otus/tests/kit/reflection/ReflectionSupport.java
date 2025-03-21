@@ -1,8 +1,6 @@
 package ru.otus.tests.kit.reflection;
 
-import ru.otus.tests.kit.annotations.DisplayName;
-import ru.otus.tests.kit.preconditions.PreconditionViolationException;
-import ru.otus.tests.kit.preconditions.Preconditions;
+import static java.util.stream.Collectors.toCollection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -10,31 +8,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toCollection;
+import ru.otus.tests.kit.annotations.DisplayName;
+import ru.otus.tests.kit.preconditions.Preconditions;
 
 public class ReflectionSupport {
 
-    private ReflectionSupport() {
-    }
+    public static final String CLASS_MUST_NOT_BE_NULL = "Class must not be null";
 
-    public static List<Method> getDeclaredMethods(Class<?> clazz) {
-        Preconditions.notNull(clazz, "Class must not be null");
-
-        List<Method> declaredMethods = Arrays.stream(clazz.getMethods())
-                .collect(toCollection(ArrayList::new));
-
-        return declaredMethods;
-    }
+    private ReflectionSupport() {}
 
     public static List<Method> getDeclaredMethods(Class<?> clazz, Class<? extends Annotation> annotationClass) {
-        Preconditions.notNull(clazz, "Class must not be null");
+        Preconditions.notNull(clazz, CLASS_MUST_NOT_BE_NULL);
 
-        List<Method> declaredMethods = Arrays.stream(clazz.getDeclaredMethods())
+        return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(annotationClass))
                 .collect(toCollection(ArrayList::new));
-
-        return declaredMethods;
     }
 
     public static String getAnnotationDisplayNameValue(Method method) {
@@ -46,17 +34,16 @@ public class ReflectionSupport {
     }
 
     public static Object newInstance(Class<?> clazz) {
-        Preconditions.notNull(clazz, "Class must not be null");
+        Preconditions.notNull(clazz, CLASS_MUST_NOT_BE_NULL);
 
         try {
             return clazz.getConstructor().newInstance();
-        } catch (Throwable t) {
-            throw new ReflectionException(
-                    String.format("Failed to instantiate class [%s].", clazz.getCanonicalName())
-            );
+        } catch (Exception e) {
+            throw new ReflectionException(String.format("Failed to instantiate class [%s].", clazz.getCanonicalName()));
         }
     }
 
+    @SuppressWarnings("java:S3011")
     public static Method makeAccessible(Method method, Object object) {
         if (!method.canAccess(object)) {
             method.setAccessible(true);
@@ -64,18 +51,16 @@ public class ReflectionSupport {
         return method;
     }
 
-    public static Object invokeMethod(Method method, Object target, Object... args) {
+    public static Object invokeMethod(Method method, Object target, Object... args) throws ReflectionException {
         Preconditions.notNull(method, "Method must not be null");
-        Preconditions.condition((target != null),
-                String.format("Cannot invoke non-static method [%s] on a null target.", method.toGenericString())
-        );
+        Preconditions.condition(
+                (target != null),
+                String.format("Cannot invoke non-static method [%s] on a null target.", method.toGenericString()));
 
         try {
             return makeAccessible(method, target).invoke(target, args);
-        } catch (Throwable t) {
-            throw new PreconditionViolationException(
-                    String.format("Failed to invoke method [%s].", method.toGenericString())
-            );
+        } catch (Exception t) {
+            throw new ReflectionException(String.format("Failed to invoke method [%s].", method.toGenericString()));
         }
     }
 }

@@ -2,6 +2,8 @@ package ru.otus.tests.kit.asserts;
 
 public class Asserts {
 
+    private Asserts() {}
+
     public static void assertEquals(int expected, int actual) {
         if (expected != actual) {
             failNotEqual(expected, actual);
@@ -15,12 +17,14 @@ public class Asserts {
     }
 
     private static void failNotEqual(Object expected, Object actual) {
-        String message = String.format("Expected value {0}, actual value {1}", expected.toString(), actual.toString());
+        String message =
+                String.format("Expected value {%s}, actual value {%s}", expected.toString(), actual.toString());
         throw new AssertionException(message);
     }
 
     private static void failEqual(Object expected, Object actual) {
-        String message = String.format("Expected value {0}, actual value {1}", expected.toString(), actual.toString());
+        String message = String.format(
+                "Expected value different from {%s}, actual value {%s}", expected.toString(), actual.toString());
         throw new AssertionException(message);
     }
 }

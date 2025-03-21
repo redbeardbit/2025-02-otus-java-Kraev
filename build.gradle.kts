@@ -62,6 +62,8 @@ subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.compilerArgs.addAll(listOf("-Xlint:all,-serial,-processing"))
+
+        dependsOn("spotlessJavaApply")
     }
 
     plugins.apply("name.remal.sonarlint")

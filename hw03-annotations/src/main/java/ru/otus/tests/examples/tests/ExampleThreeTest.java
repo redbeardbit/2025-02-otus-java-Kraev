@@ -1,5 +1,7 @@
 package ru.otus.tests.examples.tests;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.tests.kit.annotations.After;
 import ru.otus.tests.kit.annotations.Before;
 import ru.otus.tests.kit.annotations.DisplayName;
@@ -7,6 +9,8 @@ import ru.otus.tests.kit.annotations.Test;
 import ru.otus.tests.kit.asserts.Asserts;
 
 public class ExampleThreeTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(ExampleThreeTest.class);
 
     private int expected = 0;
 
@@ -25,6 +29,6 @@ public class ExampleThreeTest {
     @After
     public void afterOne() {
         expected = 0;
-        System.out.println("This is example of an after action for test ExampleThreeTest");
+        logger.info("This is example of an after action for test ExampleThreeTest");
     }
 }

@@ -2,6 +2,10 @@ plugins {
     id ("java")
 }
 
+dependencies {
+    implementation("ch.qos.logback:logback-classic")
+}
+
 tasks.register<JavaExec>("runOtusTests") {
     description = "Runs this project as a JVM application"
     group = "Execution"

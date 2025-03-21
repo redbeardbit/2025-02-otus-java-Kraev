@@ -4,8 +4,7 @@ import java.util.Collection;
 
 public class Preconditions {
 
-    public Preconditions() {
-    }
+    private Preconditions() {}
 
     public static <T extends Collection<?>> void notEmpty(T collection, String message)
             throws PreconditionViolationException {
