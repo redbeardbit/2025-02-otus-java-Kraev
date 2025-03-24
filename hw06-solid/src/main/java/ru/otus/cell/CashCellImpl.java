@@ -26,9 +26,9 @@ public class CashCellImpl implements CashCell {
     @Override
     public void addBanknote(Banknote banknote) {
         Preconditions.checkArgument(
-                !banknote.getDenomination().equals(denomination),
+                banknote.getDenomination().equals(denomination),
                 "you can't add this banknote, denomination is not correct");
-        Preconditions.checkArgument(cashKeeper.size() >= cellCapacity, "you can't add this banknote, cell is full");
+        Preconditions.checkArgument(cashKeeper.size() <= cellCapacity, "you can't add this banknote, cell is full");
 
         if (banknote.getDenomination().equals(denomination)) {
             cashKeeper.add(banknote);
@@ -36,23 +36,18 @@ public class CashCellImpl implements CashCell {
     }
 
     @Override
-    public void removeBanknote() {
-        Preconditions.checkArgument(cashKeeper.size() <= 0, "no more banknotes");
-
-        cashKeeper.removeLast();
-
-        if (cashKeeper.size() == 0) {
+    public Banknote removeBanknote() {
+        Preconditions.checkArgument(!cashKeeper.isEmpty(), "no more banknotes");
+        Banknote banknote = cashKeeper.removeLast();
+        if (cashKeeper.isEmpty()) {
             setFree();
         }
+        return banknote;
     }
 
     @Override
     public boolean isFull() {
-        if (cashKeeper.size() == cellCapacity) {
-            return true;
-        } else {
-            return false;
-        }
+        return cashKeeper.size() == cellCapacity;
     }
 
     @Override
@@ -64,9 +59,9 @@ public class CashCellImpl implements CashCell {
 
     @Override
     public void setDenomination(Denomination denomination) {
-        Preconditions.checkState(!isFreeCell, CELL_IS_ALREADY_INITIALIZED);
-        Preconditions.checkState(!cashKeeper.isEmpty(), CELL_IS_ALREADY_INITIALIZED);
-        Preconditions.checkState(denomination != null, CELL_IS_ALREADY_INITIALIZED);
+        Preconditions.checkArgument(isFreeCell, CELL_IS_ALREADY_INITIALIZED);
+        Preconditions.checkArgument(cashKeeper.isEmpty(), CELL_IS_ALREADY_INITIALIZED);
+        Preconditions.checkArgument(this.denomination == null, CELL_IS_ALREADY_INITIALIZED);
 
         this.denomination = denomination;
         isFreeCell = false;
@@ -84,10 +79,11 @@ public class CashCellImpl implements CashCell {
 
     @Override
     public boolean isFree() {
-        if (isFreeCell) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.isFreeCell;
+    }
+
+    @Override
+    public List<Banknote> getAllBanknotes() {
+        return cashKeeper;
     }
 }

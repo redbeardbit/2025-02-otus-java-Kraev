@@ -22,11 +22,11 @@ public class CashCellServiceImpl implements CashCellService {
     public Long getBalance(List<CashCell> cells) {
         return cells.stream()
                 .filter(cashCell -> !cashCell.isFree())
-                .mapToLong(cashCell -> cashCell.getCountBanknotes()
-                        + cashCell.getDenomination().ammount())
+                .mapToLong(cashCell -> cashCell.getDenomination().ammount())
                 .sum();
     }
 
+    @SuppressWarnings("java:S135")
     @Override
     public Optional<List<Banknote>> takeForStorage(
             List<Banknote> banknotes, List<CashCell> cells, List<Denomination> availableDenominations) {
@@ -48,36 +48,41 @@ public class CashCellServiceImpl implements CashCellService {
             }
             notAvailableBanknotes.add(banknote);
         }
-        return Optional.of(notAvailableBanknotes);
+        return Optional.ofNullable(notAvailableBanknotes);
     }
 
     @Override
-    public List<Banknote> releaseFromStorage(Long amount) {
-        return List.of();
-    }
-
-    private Optional<Map<Denomination, Integer>> getDenominationsAndCountBanknotes(List<CashCell> cells) {
-        if (cells.isEmpty()) {
-            return Optional.empty();
-        } else {
-            Map<Denomination, Integer> denominations = new HashMap<>();
-            for (CashCell cell : cells) {
-                if (denominations.containsKey(cell.getDenomination())) {
-                    //todo
-                    var t = denominations.get(cell.getDenomination());
+    public Optional<List<Banknote>> releaseFromStorage(
+            long amount, List<Denomination> availableDenominations, List<CashCell> cells) {
+        List<Banknote> banknotes = new ArrayList<>();
+        availableDenominations.sort(
+                Comparator.comparingInt(Denomination::ammount).reversed());
+        for (Denomination denomination : availableDenominations) {
+            while (amount >= denomination.ammount()) {
+                Optional<Banknote> banknote = getBanknotebyDenomination(denomination, cells);
+                if (banknote.isEmpty()) {
+                    break;
                 }
-                denominations.put(cell.getDenomination(), cell.getCountBanknotes());
+                amount -= banknote.get().getDenomination().ammount();
+                banknotes.add(banknote.get());
             }
-            return Optional.of(denominations);
         }
+        return Optional.ofNullable(banknotes);
     }
 
-    private boolean canAmmountBeTaken(Long amount, List<CashCell> cells) {
-        Optional<Map<Denomination, Integer>> banknotes = getDenominationsAndCountBanknotes(cells);
-        if (banknotes.isEmpty()) {
-            throw new IllegalStateException("Недостаточно банкнот в хранилище");
+    @SuppressWarnings("java:S135")
+    private Optional<Banknote> getBanknotebyDenomination(Denomination denomination, List<CashCell> cells) {
+        Banknote banknote = null;
+        for (CashCell cell : cells) {
+            if (cell.isFree()) {
+                continue;
+            }
+            if (cell.getDenomination().equals(denomination)) {
+                banknote = cell.removeBanknote();
+                break;
+            }
         }
-        return true;
+        return Optional.ofNullable(banknote);
     }
 
     private boolean checkAvailableBanknote(Banknote banknote, List<Denomination> availableDenominations) {
@@ -108,8 +113,9 @@ public class CashCellServiceImpl implements CashCellService {
 
     private Optional<CashCell> getCellbyDenomination(Denomination denomination, List<CashCell> cells) {
         return cells.stream()
-                .filter(cashCell -> cashCell.getDenomination().equals(denomination))
+                .filter(cashCell -> !cashCell.isFree())
                 .filter(cashCell -> !cashCell.isFull())
+                .filter(cashCell -> cashCell.getDenomination().equals(denomination))
                 .findFirst();
     }
 

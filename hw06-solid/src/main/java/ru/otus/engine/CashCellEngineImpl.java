@@ -2,6 +2,7 @@ package ru.otus.engine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import ru.otus.banknote.Banknote;
 import ru.otus.banknote.Denomination;
 import ru.otus.cell.CashCell;
@@ -36,12 +37,12 @@ public class CashCellEngineImpl implements CashCellEngine {
     }
 
     @Override
-    public void putMoney(List<Banknote> banknotes) {
-        cashCellService.takeForStorage(banknotes, cells, availableDenominations);
+    public Optional<List<Banknote>> putMoney(List<Banknote> banknotes) {
+        return cashCellService.takeForStorage(banknotes, cells, availableDenominations);
     }
 
     @Override
-    public List<Banknote> getMoney(Long amount) {
-        return cashCellService.releaseFromStorage(amount);
+    public Optional<List<Banknote>> getMoney(long amount) {
+        return cashCellService.releaseFromStorage(amount, availableDenominations, cells);
     }
 }

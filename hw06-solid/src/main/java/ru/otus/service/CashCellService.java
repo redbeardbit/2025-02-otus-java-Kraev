@@ -8,6 +8,9 @@ import ru.otus.cell.CashCell;
 
 public interface CashCellService {
 
+    Optional<List<Banknote>> releaseFromStorage(
+            long amount, List<Denomination> availableDenominations, List<CashCell> cells);
+
     List<Denomination> getAvailableDenomination(int[] availableNominal);
 
     void initCells(List<CashCell> cells, int cellsCount, int cellsCapacity);
@@ -16,6 +19,4 @@ public interface CashCellService {
 
     Optional<List<Banknote>> takeForStorage(
             List<Banknote> banknotes, List<CashCell> cells, List<Denomination> availableDenominations);
-
-    List<Banknote> releaseFromStorage(Long amount);
 }

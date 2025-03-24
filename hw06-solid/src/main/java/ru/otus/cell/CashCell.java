@@ -1,5 +1,6 @@
 package ru.otus.cell;
 
+import java.util.List;
 import ru.otus.banknote.Banknote;
 import ru.otus.banknote.Denomination;
 
@@ -7,7 +8,7 @@ public interface CashCell {
 
     void addBanknote(Banknote banknote);
 
-    void removeBanknote();
+    Banknote removeBanknote();
 
     int getCountBanknotes();
 
@@ -20,4 +21,6 @@ public interface CashCell {
     void setFree();
 
     boolean isFree();
+
+    List<Banknote> getAllBanknotes();
 }
