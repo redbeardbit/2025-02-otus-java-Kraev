@@ -26,29 +26,26 @@ public class CashCellServiceImpl implements CashCellService {
                 .sum();
     }
 
-    @SuppressWarnings("java:S135")
     @Override
     public Optional<List<Banknote>> takeForStorage(
             List<Banknote> banknotes, List<CashCell> cells, List<Denomination> availableDenominations) {
         List<Banknote> notAvailableBanknotes = new ArrayList<>();
         for (Banknote banknote : banknotes) {
-            if (!checkAvailableBanknote(banknote, availableDenominations)) {
+            if (!checkAvailableBanknote(banknote, availableDenominations)
+                    || !tryToPutBanknote(banknote, cells, false)) {
                 notAvailableBanknotes.add(banknote);
-                continue;
             }
-            if (getCellAndPutBanknote(banknote, cells)) {
-                continue;
-            }
-            if (!getNewCellForPutBanknote(banknote, cells)) {
-                notAvailableBanknotes.add(banknote);
-                continue;
-            }
-            if (getCellAndPutBanknote(banknote, cells)) {
-                continue;
-            }
-            notAvailableBanknotes.add(banknote);
         }
         return Optional.ofNullable(notAvailableBanknotes);
+    }
+
+    private boolean tryToPutBanknote(Banknote banknote, List<CashCell> cells, boolean isLastChance) {
+        if (getCellAndPutBanknote(banknote, cells)) {
+            return true;
+        } else if (!isLastChance && getNewCellForPutBanknote(banknote, cells)) {
+            return tryToPutBanknote(banknote, cells, true);
+        }
+        return false;
     }
 
     @Override
@@ -70,14 +67,10 @@ public class CashCellServiceImpl implements CashCellService {
         return Optional.ofNullable(banknotes);
     }
 
-    @SuppressWarnings("java:S135")
     private Optional<Banknote> getBanknotebyDenomination(Denomination denomination, List<CashCell> cells) {
         Banknote banknote = null;
         for (CashCell cell : cells) {
-            if (cell.isFree()) {
-                continue;
-            }
-            if (cell.getDenomination().equals(denomination)) {
+            if (!cell.isFree() && cell.getDenomination().equals(denomination)) {
                 banknote = cell.removeBanknote();
                 break;
             }
