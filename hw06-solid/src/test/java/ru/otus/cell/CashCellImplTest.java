@@ -93,7 +93,7 @@ class CashCellImplTest {
             cashCell.addBanknote(banknote);
             banknotes.add(banknote);
         }
-        assertEquals(3, cashCell.getCountBanknotes());
+        assertEquals(banknotes.size(), cashCell.getCountBanknotes());
     }
 
     @Test
