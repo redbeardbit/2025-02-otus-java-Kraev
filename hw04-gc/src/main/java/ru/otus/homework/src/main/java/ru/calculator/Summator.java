@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("java:S2245")
 public class Summator {
     private int sum = 0;
     private int prevValue = 0;
