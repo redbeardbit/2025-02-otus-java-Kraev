@@ -6,13 +6,15 @@ import ru.otus.model.Message;
 
 public class HistoryListener implements Listener, HistoryReader {
 
+    MessageKeeper keeper = new MessageKeeper();
+
     @Override
     public void onUpdated(Message msg) {
-        throw new UnsupportedOperationException();
+        keeper.putMessage(msg);
     }
 
     @Override
     public Optional<Message> findMessageById(long id) {
-        throw new UnsupportedOperationException();
+        return keeper.findMessageById(id);
     }
 }
