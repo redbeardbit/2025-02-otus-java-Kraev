@@ -36,8 +36,10 @@ allprojects {
     val testcontainersBom: String by project
     val protobufBom: String by project
     val guava: String by project
+    val gson: String by project
     val junit: String by project
     val assertj: String by project
+    val glassfishJson: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -48,8 +50,11 @@ allprojects {
                 mavenBom("com.google.protobuf:protobuf-bom:$protobufBom")
             }
             dependency("com.google.guava:guava:$guava")
+            dependency("com.google.code.gson:gson:$gson")
+            dependency("org.glassfish:jakarta.json:$glassfishJson")
         }
     }
+
 }
 
 subprojects {

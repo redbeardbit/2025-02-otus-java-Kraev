@@ -1,11 +1,10 @@
 package ru.otus.dataprocessor;
 
-public class FileProcessException extends RuntimeException {
-    public FileProcessException(Exception ex) {
-        super(ex);
-    }
+import java.io.IOException;
 
-    public FileProcessException(String msg) {
-        super(msg);
+public class FileProcessException extends RuntimeException {
+
+    public FileProcessException(String msg, IOException e) {
+        super(msg, e);
     }
 }
