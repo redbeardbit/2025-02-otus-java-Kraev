@@ -2,11 +2,14 @@ package ru.otus.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import ru.otus.annotation.Log;
+import ru.otus.cache.MethodType;
 
 public class Reflection {
 
@@ -22,30 +25,31 @@ public class Reflection {
         return interfaceType.cast(object);
     }
 
-    public static String[] getParameterNames(Method method) {
-        Parameter[] parameters = method.getParameters();
-        return Arrays.stream(parameters).map(Parameter::getName).toArray(String[]::new);
-    }
-
-    public static String getLogMessage(Method method, Object[] args) {
-        String[] parameterNames = getParameterNames(method);
-        String params = Arrays.stream(parameterNames)
-                .map(name -> String.format(
-                        "%s:%s", name, args[Arrays.asList(parameterNames).indexOf(name)]))
-                .collect(Collectors.joining(", "));
-        return String.format("executed method: %s, %s", method.getName(), params);
-    }
-
-    public static boolean isLogAnnotationPresent(Object target, Method method) {
-        try {
-            Method targetMethod = target.getClass().getMethod(method.getName(), method.getParameterTypes());
-
-            if (targetMethod.isAnnotationPresent(Log.class)) {
-                return true;
+    public static Optional<Map<String, MethodType>> getMethods(Object target) {
+        Map<String, MethodType> result = new HashMap<>();
+        var methods = target.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(Log.class)) {
+                result.put(
+                        getMethodSignature(target.getClass().getName(), method),
+                        new MethodType(method.getName(), method.getParameters()));
             }
-        } catch (NoSuchMethodException e) {
-            return false;
         }
-        return false;
+        return Optional.ofNullable(result);
+    }
+
+    @SuppressWarnings("java:S3358")
+    // implementation the same as java.lang.Class.methodToString
+    public static String getMethodSignature(String className, Method method) {
+        var argTypes = method.getParameters();
+
+        return className
+                + '.'
+                + method.getName()
+                + ((argTypes == null || argTypes.length == 0)
+                        ? "()"
+                        : Arrays.stream(argTypes)
+                                .map(c -> c == null ? "null" : c.toString())
+                                .collect(Collectors.joining(",", "(", ")")));
     }
 }

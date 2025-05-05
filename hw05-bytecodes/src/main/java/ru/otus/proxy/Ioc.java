@@ -1,5 +1,6 @@
 package ru.otus.proxy;
 
+import ru.otus.cache.MethodCache;
 import ru.otus.logger.LoggingInvocationHandler;
 import ru.otus.logger.SillyLogger;
 
@@ -19,6 +20,7 @@ public class Ioc {
         if (!interfaceType.isInterface()) {
             throw new IllegalArgumentException("Interface type must be an interface");
         }
-        return Reflection.newProxy(interfaceType, new LoggingInvocationHandler(target, new SillyLogger()));
+        return Reflection.newProxy(
+                interfaceType, new LoggingInvocationHandler(target, new SillyLogger(), MethodCache.INSTANCE));
     }
 }
