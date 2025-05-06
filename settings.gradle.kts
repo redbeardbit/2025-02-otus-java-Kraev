@@ -2,6 +2,9 @@ rootProject.name = "2025-02-otus-java-Kraev"
 
 include("hw01-gradle")
 include("hw02-generics")
+include("hw03-annotations")
+include("hw04-gc")
+include("hw05-bytecodes")
 include("hw06-solid")
 
 rootProject.children.forEach {
