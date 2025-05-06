@@ -38,6 +38,7 @@ allprojects {
     val guava: String by project
     val junit: String by project
     val assertj: String by project
+    val mockito: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
