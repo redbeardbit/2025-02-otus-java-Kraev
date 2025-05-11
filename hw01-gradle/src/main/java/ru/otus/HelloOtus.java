@@ -11,6 +11,7 @@ public class HelloOtus {
         sayHello(DEFAULT_WORDS);
     }
 
+    @SuppressWarnings("java:S106")
     private static void sayHello(String... values) {
         Joiner joiner = Joiner.on(" ").skipNulls();
         System.out.println(joiner.join(values));
