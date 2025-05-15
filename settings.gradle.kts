@@ -6,6 +6,7 @@ include("hw03-annotations")
 include("hw04-gc")
 include("hw05-bytecodes")
 include("hw06-solid")
+include("hw07-patterns")
 include("hw08-serialization")
 
 rootProject.children.forEach {
