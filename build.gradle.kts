@@ -39,6 +39,7 @@ allprojects {
     val jmh: String by project
     val asm: String by project
     val glassfishJson: String by project
+    val gson: String by project
     val junit: String by project
     val assertj: String by project
     val mockito: String by project
@@ -56,6 +57,7 @@ allprojects {
             dependency("org.openjdk.jmh:jmh-generator-annprocess:$jmh")
             dependency("org.glassfish:jakarta.json:$glassfishJson")
             dependency("org.ow2.asm:asm-commons:$asm")
+            dependency("com.google.code.gson:gson:$gson")
         }
     }
     configurations.all {
