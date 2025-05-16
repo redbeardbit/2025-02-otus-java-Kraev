@@ -1,19 +1,18 @@
 package ru.otus.dataprocessor;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import ru.otus.model.Measurement;
 
 public class ProcessorAggregator implements Processor {
 
     @Override
-    public Map<String, Double> process(List<Measurement> data) {
+    public TreeMap<String, Double> process(List<Measurement> data) {
         if (data.isEmpty()) {
-            Collections.emptyMap();
+            return new TreeMap<>();
         }
         return data.stream()
-                .collect(Collectors.groupingBy(Measurement::name, Collectors.summingDouble(Measurement::value)));
+                .collect(Collectors.groupingBy(
+                        Measurement::name, TreeMap::new, Collectors.summingDouble(Measurement::value)));
     }
 }
