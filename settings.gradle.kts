@@ -8,6 +8,8 @@ include("hw05-bytecodes")
 include("hw06-solid")
 include("hw07-patterns")
 include("hw08-serialization")
+include("hw09-jdbc:demo")
+include("hw09-jdbc:homework")
 
 rootProject.children.forEach {
     project(it.path).projectDir.mkdirs()
