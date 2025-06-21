@@ -27,9 +27,11 @@ public class Phone implements Cloneable {
     private Client client;
 
     public Phone(Long id, String number) {
-        throw new UnsupportedOperationException();
+        this.id = id;
+        this.number = number;
     }
 
+    @SuppressWarnings({"java:S2975", "java:S1182"})
     @Override
     public Phone clone() {
         return new Phone(id, number, client);

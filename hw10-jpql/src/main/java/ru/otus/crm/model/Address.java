@@ -31,6 +31,7 @@ public class Address implements Cloneable {
         this.street = street;
     }
 
+    @SuppressWarnings({"java:S2975", "java:S1182"})
     @Override
     public Address clone() {
         return new Address(this.id, this.street, this.client);

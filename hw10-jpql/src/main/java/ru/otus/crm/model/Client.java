@@ -61,6 +61,7 @@ public class Client implements Cloneable {
         }
     }
 
+    @SuppressWarnings({"java:S2975", "java:S1182"})
     @Override
     public Client clone() {
         return new Client(this.id, this.name, this.address, this.phones);
