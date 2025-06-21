@@ -1,11 +1,10 @@
 package ru.otus.crm.dbmigrations;
 
+import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class MigrationsExecutorFlyway {
-    private static final Logger logger = LoggerFactory.getLogger(MigrationsExecutorFlyway.class);
 
     private final Flyway flyway;
 
@@ -13,12 +12,14 @@ public class MigrationsExecutorFlyway {
         flyway = Flyway.configure()
                 .dataSource(dbUrl, dbUserName, dbPassword)
                 .locations("classpath:/db/migration")
+                .createSchemas(true)
+                .schemas(dbUserName)
                 .load();
     }
 
     public void executeMigrations() {
-        logger.info("db migration started...");
+        log.info("db migration started...");
         flyway.migrate();
-        logger.info("db migration finished.");
+        log.info("db migration finished.");
     }
 }
